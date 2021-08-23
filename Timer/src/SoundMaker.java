@@ -18,7 +18,9 @@ public class SoundMaker {
 			sSE = new Sequence(Sequence.PPQ, 4);
 			eSE = new Sequence(Sequence.PPQ, 4);
 			
+			@SuppressWarnings("unused")
 			Track sSEtrack = getSSETrack(sSE);
+			@SuppressWarnings("unused")
 			Track eSEtrack = getESETrack(eSE);
 
 		
