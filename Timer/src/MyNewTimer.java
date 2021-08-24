@@ -4,7 +4,9 @@
  * 우선 50분/10분 간격으로 직무시간, 쉬는시간을 구분하기 위한 것을 알림용도로 쓰기 위해 수정하고,
  * 추후, 현재시간을 표시하고, 소리를 내는 시간을 따로 사용자가 프로그램 내에서 적고, 저장할 수 있게 수정한다. 현재 쓰고 있는 시간마다 반복기능역시 추가한다. 
  * 
- * 
+ * 0824
+ * 00:00:00에서 시간을 재는 측정용도에서 현재시간을 표기하고 시간을 재는 용도로 바꾸었다.
+ * 변수의 가짓수가 줄고, 변수들의 이름 중 수정된 것도 있다.
  * 
  */
 
@@ -28,7 +30,7 @@ public class MyNewTimer {
 	private JButton go;
 	private JButton stop;
 	private JButton pause;
-	private JLabel time;
+	private JLabel timeLbl;
 	
 	private MyNewTimer.Clock clock;
 	
@@ -72,11 +74,11 @@ public class MyNewTimer {
 //				}
 //			});
 		
-		time = new JLabel();
+		timeLbl = new JLabel();
 
-		time.setFont(new Font("dodum", Font.PLAIN, 80));
+		timeLbl.setFont(new Font("dodum", Font.PLAIN, 80));
 	
-		frame.add(time, BorderLayout.CENTER);
+		frame.add(timeLbl, BorderLayout.CENTER);
 		frame.add(go, BorderLayout.EAST);
 //		frame.add(pause, BorderLayout.EAST);
 		
@@ -88,53 +90,46 @@ public class MyNewTimer {
 	
 	public static void main(String [] args) {
 		
-		long durationInMillis = System.currentTimeMillis();
-		long millis = durationInMillis % 1000;
-		long second = (durationInMillis / 1000) % 60;
-		long minute = (durationInMillis / (1000 * 60)) % 60;
-		long hour = (durationInMillis / (1000 * 60 * 60)) % 24;
-		
-		System.out.println(System.currentTimeMillis());
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(System.currentTimeMillis());
-		
-
-		String time = String.format("%02d:%02d:%02d.%d", hour, minute, second, millis);
-		System.out.println(time);
+//		long durationInMillis = System.currentTimeMillis();
+//		long millis = durationInMillis % 1000;
+//		long second = (durationInMillis / 1000) % 60;
+//		long minute = (durationInMillis / (1000 * 60)) % 60;
+//		long hour = (durationInMillis / (1000 * 60 * 60)) % 24;
+//		
+//		System.out.println(System.currentTimeMillis());
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println(System.currentTimeMillis());
+//		
+//
+//		String time = String.format("%02d:%02d:%02d.%d", hour, minute, second, millis);
+//		System.out.println(time);
 		@SuppressWarnings("unused")
 		MyNewTimer timer = new MyNewTimer();
 	}
 	class Clock extends Thread{
 		public void run() {
 			try {
-				long adjustTime = 0; // for 00:00:00 start. default is 09:00:00 start.
-				long start = System.currentTimeMillis()-adjustTime;
-				long realtime;
-				long displaytime;
-				
+				long time = System.currentTimeMillis();
 				
 				final long effectTime = Time.hour*1;//갱신
-				long ssetime = Time.min*0+adjustTime;
-				long esetime = Time.min*50+adjustTime;
+				long ssetime = time + Time.min*0;
+				long esetime = time + Time.min*50;
 				
 				System.out.println("sse:"+ssetime);
 				System.out.println("ese:"+esetime);
 				while(true) {
-					realtime = System.currentTimeMillis();
-					displaytime = realtime;
-					String display =timeformat.format(realtime); 
-					time.setText(display);
+					time = System.currentTimeMillis();
+					String display =timeformat.format(time); 
+					timeLbl.setText(display);
 					
-					System.out.println(start);
-					System.out.println(realtime);
-					System.out.println(displaytime);
+					System.out.println(time);
 					
-					if(displaytime>ssetime) {
+					if(time>ssetime) {
 						ssetime+=effectTime;
 						new Thread(new Runnable() {
 							@Override
@@ -150,7 +145,7 @@ public class MyNewTimer {
 						}).run();
 						System.out.println("start!");
 					}
-					if(displaytime>esetime) {
+					if(time>esetime) {
 						esetime+=effectTime;
 						System.out.println("end!");
 						new Thread(new Runnable() {
