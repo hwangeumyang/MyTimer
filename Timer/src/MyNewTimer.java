@@ -116,9 +116,15 @@ public class MyNewTimer {
 			try {
 				long time = System.currentTimeMillis();
 				
+				long day = 1000*60*60;
 				final long effectTime = Time.hour*1;//°»½Å
-				long ssetime = time + Time.min*0;
-				long esetime = time + Time.min*50;
+				long ssetime = time - time%(Time.hour) + Time.min*0;
+				long esetime = time - time%(Time.hour) + Time.min*50;
+				if(ssetime < time) ssetime+= effectTime;
+				if(esetime < time) esetime+= effectTime;
+				
+				
+				System.out.println(timeformat.format(ssetime) );
 				
 				System.out.println("sse:"+ssetime);
 				System.out.println("ese:"+esetime);
